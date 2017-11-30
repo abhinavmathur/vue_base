@@ -5,10 +5,12 @@
     <button @click="selectedComponent = 'appAuthor'">Author</button>
     <br>
 
+    <keep-alive>
+      <component :is="selectedComponent">
+        hello world
+      </component>
+    </keep-alive>
 
-    <component :is="selectedComponent">
-      hello world
-    </component>
   </div>
 </template>
 
