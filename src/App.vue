@@ -5,6 +5,9 @@
     <br>
     <text-box></text-box>
     <br>
+    <hr>
+    <br>
+    <quote-container></quote-container>
   </div>
 </template>
 
@@ -12,6 +15,7 @@
 
   import ProgressBar from './components/ProgressBar.vue'
   import TextBox from './components/TextBox.vue'
+  import QuoteContainer from './components/QuoteContainer.vue'
 
   export default {
     name: 'app',
@@ -21,7 +25,8 @@
     },
     components: {
       progressBar: ProgressBar,
-      textBox: TextBox
+      textBox: TextBox,
+      quoteContainer: QuoteContainer
 
     }
   }
