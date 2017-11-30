@@ -1,7 +1,13 @@
 <template>
   <div class="container-fluid">
     <div v-if="quote_data.length > 0">
-      <quote-box v-for="quote in quote_data" :key="Math.random()"></quote-box>
+      <div class="row">
+        <div class="col-md-3" v-for="quote in quote_data" :key="Math.random()">
+          <quote-box>
+            <p slot="description">{{ quote }}</p>
+          </quote-box>
+        </div>
+      </div>
     </div>
     <div v-else>
       <div class="row">
@@ -22,7 +28,7 @@
 
     data(){
       return {
-        quote_data: []
+        quote_data: ['dadadadad','dadadadad']
       }
     },
     components: {
