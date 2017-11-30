@@ -7,8 +7,9 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import BootstrapVue from 'bootstrap-vue'
 
+export const eventBus = new Vue();
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 Vue.use(BootstrapVue);
 /* eslint-disable no-new */
 new Vue({

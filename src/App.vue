@@ -16,18 +16,29 @@
   import ProgressBar from './components/ProgressBar.vue'
   import TextBox from './components/TextBox.vue'
   import QuoteContainer from './components/QuoteContainer.vue'
+  import { eventBus } from './main'
 
   export default {
     name: 'app',
     data(){
-      return {}
+      return {
 
+      }
+    },
+    created(){
+      eventBus.$on('add_button_clicked', () => {
+        this.add_quote();
+      })
     },
     components: {
       progressBar: ProgressBar,
       textBox: TextBox,
       quoteContainer: QuoteContainer
+    },
+    methods: {
+      add_quote(){
 
+      }
     }
   }
 </script>

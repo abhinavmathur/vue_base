@@ -2,9 +2,9 @@
   <div class="row">
     <div class="col-md-8 offset-md-2">
       <h3>Quotes Added</h3>
-      <b-progress :value="counter"
+      <b-progress :value="value"
                   :max="max"
-                  :measure_progress="measureProgress(counter)"
+                  :variant="variant_value"
                   :show-progress="showProgress"
                   :animated="isAnimated"></b-progress>
     </div>
@@ -12,18 +12,35 @@
 </template>
 
 <script>
+  import { eventBus } from './../main'
+
   export default {
     data(){
       return {
-        counter: 20,
+        max: 10,
+        value: 0,
         showProgress: true,
-        max: 100,
+        variant_value: 'default',
         isAnimated: true,
       }
     },
+    created(){
+      eventBus.$on('quote_added', (number) => {
+        this.control_progress_bar(number);
+      })
+    },
     methods: {
-      measureProgress(data){
-        console.log(data)
+      control_progress_bar(value){
+        this.value = value;
+        if(value === 10){
+          this.showProgress = false;
+          this.variant_value = 'success';
+          this.isAnimated = false;
+        } else {
+          this.showProgress = true;
+          this.variant_value = 'default';
+          this.isAnimated = true;
+        }
       }
     }
   }
