@@ -3,8 +3,9 @@
     <div v-if="quote_data.length > 0">
       <div class="row">
         <div class="col-md-3" v-for="quote in quote_data" :key="quote">
-          <quote-box :position="quote" @delete_quote="delete_quote($event)">
-            <p slot="description">{{ quote }}</p>
+          <quote-box :position="quote"
+                     @handle_quote_edit="quote_edit($event)"
+                     @delete_quote="delete_quote($event)">
           </quote-box>
         </div>
       </div>
@@ -52,9 +53,20 @@
     methods: {
       delete_quote(value){
         let quote_index = this.quote_data.indexOf(value);
+        let conf = confirm('Are you sure?');
+        if(conf){
+          if(quote_index !== -1){
+            this.quote_data.splice(quote_index, 1);
+            eventBus.$emit('quote_added', this.quote_data.length)
+          }
+        }
+      },
+      quote_edit(arr){
+        let prevText = arr[0];
+        let currentText = arr[1];
+        let quote_index = this.quote_data.indexOf(prevText);
         if(quote_index !== -1){
-          this.quote_data.splice(quote_index, 1);
-          eventBus.$emit('quote_added', this.quote_data.length)
+          this.quote_data[quote_index] = currentText;
         }
       }
     }
