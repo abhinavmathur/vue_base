@@ -1,10 +1,9 @@
 <template>
   <div class="container-fluid">
-    {{ quote_data.length }}
     <div v-if="quote_data.length > 0">
       <div class="row">
-        <div class="col-md-3" v-for="(quote, index) in quote_data" :key="index">
-          <quote-box>
+        <div class="col-md-3" v-for="quote in quote_data" :key="quote">
+          <quote-box :position="quote" @delete_quote="delete_quote($event)">
             <p slot="description">{{ quote }}</p>
           </quote-box>
         </div>
@@ -44,12 +43,20 @@
         }
         else {
           alert('maximum 10 quotes')
-
         }
       })
     },
     components: {
       quoteBox: QuoteBox
+    },
+    methods: {
+      delete_quote(value){
+        let quote_index = this.quote_data.indexOf(value);
+        if(quote_index !== -1){
+          this.quote_data.splice(quote_index, 1);
+          eventBus.$emit('quote_added', this.quote_data.length)
+        }
+      }
     }
   }
 </script>
