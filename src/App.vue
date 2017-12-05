@@ -5,6 +5,8 @@
         <h1>Filters and Mixins</h1>
         <input type="text" v-model="text">
         <p>{{ text | reverseText }}</p>
+        <p>{{ text | display_length }}</p>
+        <p v-text="reversedText"></p>
       </div>
     </div>
   </div>
@@ -27,6 +29,14 @@
           return str.charAt(0).toUpperCase() + str.slice(1)
         }
 
+      }
+    },
+    computed: {
+      reversedText() {
+        if(this.text !== 0){
+          let str = this.text.split('').reverse().join('').toLocaleLowerCase();
+          return str.charAt(0).toUpperCase() + str.slice(1)
+        }
       }
     }
   }
