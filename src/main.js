@@ -2,8 +2,15 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App'
+import Marked from 'marked';
 
-Vue.config.productionTip = false
+
+import Vuetify from 'vuetify'
+Vue.use(Vuetify);
+
+Vue.config.productionTip = false;
+
+export const eventBus = new Vue();
 
 /* eslint-disable no-new */
 new Vue({
