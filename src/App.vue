@@ -1,52 +1,135 @@
 <template>
-  <v-app>
-    <toolbar></toolbar>
-    <v-container-fluid>
-      <v-layout row wrap grid-list-sm>
-        <v-flex md2 lg2>
-          <v-navigation-drawer class="mt-4">
-            <v-list dense class="pt-0">
-              <v-list-tile v-for="item in items" :key="item.title" @click="">
-                <v-list-tile-action>
-                  <v-icon>{{ item.icon }}</v-icon>
-                </v-list-tile-action>
+  <v-container fluid>
+    <v-layout row>
+      <v-flex md4>
+        <v-btn block color="green" @click="addNote()" :title="notesTitle">Add Note</v-btn>
+        <br>
+        <v-card>
+          <v-toolbar color="blue" light>
+            <v-toolbar-title>My Notes</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-icon></v-icon>
+          </v-toolbar>
+          <v-list two-line>
+            <template>
+              <template v-if="notes.length === 0">
+                <v-subheader>You have no notes</v-subheader>
+              </template>
+              <template v-else>
+                <v-subheader>Notes List</v-subheader>
+              </template>
+              <v-divider></v-divider>
+              <v-list-tile v-for="note in notes" :key="note.id" @click="selectNote(note)">
                 <v-list-tile-content>
-                  <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+                  <v-list-tile-title>{{ note.title }}</v-list-tile-title>
                 </v-list-tile-content>
               </v-list-tile>
-            </v-list>
-          </v-navigation-drawer>
+            </template>
+          </v-list>
+        </v-card>
+      </v-flex>
+      <template v-if="notes.length !== 0">
+        <v-flex md4 class="ml-2">
+          <br><br><br><br>
+          <v-card class="pa-2">
+            <v-text-field
+              label="Edit Name"
+              v-model="selectedNote.title"
+            ></v-text-field>
+            <v-btn flat @click="deleteNote">Delete This Note</v-btn>
+            <v-text-field
+              label="Write your note in MarkDown"
+              v-model="selectedNote.content"
+              multi-line
+            ></v-text-field>
+          </v-card>
         </v-flex>
-        <v-flex md4 lg4 offset-lg1 offset-md1>
-          <note></note>
+        <v-flex md4 class="ml-2">
+          <br><br><br><br>
+          <v-card class="pa-2">
+            <p v-html="notePreview"></p>
+          </v-card>
         </v-flex>
-        <v-flex md4 lg4 offset-lg1 offset-md1>
-          <preview></preview>
+      </template>
+      <template v-else>
+        <v-flex md8 text-center>
+          <br><br><br><br>
+          <v-card text-md-center class="pa-5 ml-2">
+            <h2 text-center>Seems like you have no notes here</h2>
+          </v-card>
         </v-flex>
-      </v-layout>
-    </v-container-fluid>
-  </v-app>
+      </template>
+
+    </v-layout>
+  </v-container>
 </template>
 
 <script>
-
-  import Toolbar from './Toolbar';
-  import Note from './components/Note';
-  import Preview from './components/Preview'
+  import Marked from 'marked'
   export default {
-    name: 'app',
     data(){
       return {
-        items: [
-          { title: 'Home', icon: 'dashboard' },
-          { title: 'About', icon: 'question_answer' }
-        ]
+        notes: JSON.parse(localStorage.getItem('notes')) || [],
+        selectedId: localStorage.getItem('selected-id') || null
       }
     },
-    components: {
-      Toolbar,
-      Note,
-      Preview
+    computed: {
+      notePreview(){
+        return this.selectedNote ? Marked(this.selectedNote.content) : ''
+      },
+      notesTitle(){
+        if(this.notes.length !== 0){
+          return 'You have '+ this.notes.length + ' notes'
+        } else {
+          return 'Click here to add your first note!'
+        }
+      },
+      selectedNote(){
+        if(this.notes.length !== 0){
+          return this.notes.find((note) => {
+            return note.id === this.selectedId
+          })
+        } else {
+          return {
+            id: String(Date.now()),
+            title: 'New note ' + (this.notes.length + 1),
+            content: '**Hi!** This notebook is using [markdown](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) for formatting!',
+            created: Date.now(),
+            favorite: false
+          }
+        }
+      }
+    },
+    watch: {
+      notes: {
+        handler: 'saveNotes',
+        deep: true
+      }
+    },
+    methods: {
+      addNote(){
+        const time = Date.now();
+        const note = {
+          id: String(time),
+          title: 'New note ' + (this.notes.length + 1),
+          content: '**Hi!** This notebook is using [markdown](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) for formatting!',
+          created: time,
+          favorite: false
+        };
+
+        this.notes.push(note);
+        this.selectNote(note)
+      },
+      selectNote(note){
+        this.selectedId = note.id
+        localStorage.setItem('selected-id', note.id)
+      },
+      saveNotes(){
+        localStorage.setItem('notes', JSON.stringify(this.notes))
+      },
+      deleteNote(){
+
+      }
     }
   }
 </script>

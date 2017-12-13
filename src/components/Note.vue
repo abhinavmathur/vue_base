@@ -14,22 +14,22 @@
   import { eventBus } from "../main";
 
   export default {
+    props: ['noteContent', 'noteId'],
+    created(){
+      this.content = this.noteContent;
+    },
     data(){
       return {
         content: ''
       }
     },
-    created(){
-      this.content = localStorage.getItem('content') || 'You can write in **markdown**'
-
-    },
     watch: {
-      content: {
+      noteContent:  {
         handler(val, oldVal){
-          eventBus.$emit('markdown', Marked(val));
-          localStorage.setItem('content', val)
+          localStorage.setItem(this.noteId, val)
         }
       }
     }
+
   }
 </script>
