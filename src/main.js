@@ -4,12 +4,14 @@ import Vue from 'vue'
 import App from './App'
 
 
+
 import Vuetify from 'vuetify'
 Vue.use(Vuetify);
 
 Vue.config.productionTip = false;
 
 export const eventBus = new Vue();
+
 
 /* eslint-disable no-new */
 new Vue({
