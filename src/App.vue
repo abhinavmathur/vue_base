@@ -121,14 +121,30 @@
         this.selectNote(note)
       },
       selectNote(note){
-        this.selectedId = note.id
+        this.selectedId = note.id;
         localStorage.setItem('selected-id', note.id)
       },
       saveNotes(){
         localStorage.setItem('notes', JSON.stringify(this.notes))
       },
       deleteNote(){
-
+        let vm = this;
+        if(this.selectedNote && confirm('Delete this note?')){
+          let index = this.notes.indexOf(this.selectedNote);
+          if(index !== -1){
+            if(vm.notes.length === 1) {
+              vm.selectedId = null;
+              localStorage.setItem('selected-id', null)
+            } else if(vm.notes[0].id === this.selectedNote.id){
+              vm.selectedId = vm.notes[1].id;
+              localStorage.setItem('selected-id', vm.notes[1].id)
+            } else {
+              vm.selectedId = vm.notes[0].id;
+              localStorage.setItem('selected-id', vm.notes[0].id)
+            }
+            this.notes.splice(index, 1)
+          }
+        }
       }
     }
   }
