@@ -9,15 +9,20 @@ import state from './state/state'
 import VueState from './plugins/state'
 import SmartForm from './components/SmartForm'
 import FormInput from './components/FormInput'
+import * as filters from './filters'
+
 
 Vue.component('SmartForm', SmartForm);
 Vue.component('FormInput', FormInput);
+Vue.component('Loading', Loading)
 Vue.config.productionTip = false;
 Vue.use(VueFetch, {
   baseUrl: 'http://localhost:3000/'
 });
 Vue.use(VueState, state);
-
+for (const key in filters) {
+  Vue.filter(key, filters[key])
+}
 
 /* eslint-disable no-new */
 
@@ -34,8 +39,7 @@ async function main(){
     router,
     template: '<AppLayout/>',
     components: {
-      AppLayout,
-      Loading
+      AppLayout
     }
   })
 }

@@ -1,9 +1,19 @@
 export default function(resources) {
   return {
-    created(){
-      for(const key in resources){
+    created () {
+      for (const key in resources) {
         let url = resources[key]
-        this.fetchResource(key, url)
+        // If the value is a function
+        // We watch its result
+        if (typeof url === 'function') {
+          this.$watch(url, (val) => {
+            this.fetchResource(key, val)
+          }, {
+            immediate: true,
+          })
+        } else {
+          this.fetchResource(key, url)
+        }
       }
     },
     data(){
