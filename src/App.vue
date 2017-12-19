@@ -1,65 +1,61 @@
 <template>
-  <v-app>
-    <v-container>
-      <v-layout row wrap>
-        <v-flex xs6>
-          <register @unregister="handle_unregister" :registrations="registrations"></register>
-        </v-flex>
-        <v-flex xs6>
-          <unregister @register="handle_register" :users="users"></unregister>
-        </v-flex>
-      </v-layout>
-    </v-container>
-  </v-app>
+  <div id="app">
+    <app-registration @userRegistered="userRegistered" :users="unregisteredUsers"></app-registration>
+    <app-registrations @userUnregistered="userUnregistered" :registrations="registrations"></app-registrations>
+  </div>
 </template>
 
 <script>
-  import Register from './components/Register'
-  import Unregister from './components/Unregister'
+  import Registration from './components/Registration.vue';
+  import Registrations from './components/Registrations.vue';
+
   export default {
-    name: 'Basic',
-    data(){
+    data() {
       return {
         registrations: [],
-        users:
-          [
-            { id: 1, name: 'Anna', registered: false },
-            { id: 2, name: 'Mat', registered: false },
-            { id: 3, name: 'Hannah', registered: false },
-            { id: 4, name: 'Sam', registered: false }
-          ]
+        users: [
+          {id: 1, name: 'Max', registered: false},
+          {id: 2, name: 'Anna', registered: false},
+          {id: 3, name: 'Chris', registered: false},
+          {id: 4, name: 'Sven', registered: false}
+        ]
+      }
+    },
+    computed: {
+      unregisteredUsers() {
+        return this.users.filter((user) => {
+          return !user.registered;
+        });
+      }
+    },
+    methods: {
+      userRegistered(user) {
+        const date = new Date;
+        this.registrations.push({userId: user.id, name: user.name, date: date.getMonth() + '/' + date.getDay()})
+      },
+      userUnregistered(registration) {
+        const user = this.users.find(user => {
+          return user.id === registration.userId;
+        });
+        user.registered = false;
+        this.registrations.splice(this.registrations.indexOf(registration), 1);
+
       }
     },
     components: {
-      Register,
-      Unregister
-    },
-    methods: {
-      handle_register(user){
-
-        const date = new Date();
-
-        let obj = {
-          user_id: user.id,
-          name: user.name,
-          date: date.getMonth()
-        }
-        this.registrations.push(obj)
-        this.users.splice(this.users.indexOf(user), 1)
-
-      },
-      handle_unregister(user){
-        const selected_user = this.registrations.find((arr_user) => {
-          return arr_user.user_id === user.user_id
-        });
-        this.users.push({ id: selected_user.user_id, name: selected_user.name, registered: false })
-
-        this.registrations.splice(this.registrations.indexOf(selected_user), 1)
-      }
+      appRegistration: Registration,
+      appRegistrations: Registrations
     }
   }
 </script>
 
 <style>
-
+  #app {
+    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
+    margin-top: 60px;
+  }
 </style>

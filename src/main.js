@@ -1,9 +1,8 @@
 require('babel-polyfill');
 import Vue from 'vue'
 import App from './App'
-import Vuetify from 'vuetify'
+import { store } from './store/store'
 
-Vue.use(Vuetify);
 
 Vue.config.productionTip = false;
 
@@ -11,5 +10,6 @@ Vue.config.productionTip = false;
 new Vue({
   el: '#app',
   template: '<App/>',
-  components: { App }
+  components: { App },
+  store
 })
