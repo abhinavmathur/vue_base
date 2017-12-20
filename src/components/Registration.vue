@@ -17,8 +17,12 @@
       }
     },
     methods: {
-      registerUser(user) {
-        this.$store.commit('register', user.id)
+      async registerUser(user) {
+        try {
+          await this.$store.dispatch('register', user.id)
+        } catch(e) {
+          console.log(e)
+        }
       }
     }
   }
